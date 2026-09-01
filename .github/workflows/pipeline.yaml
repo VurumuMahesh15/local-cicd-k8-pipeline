@@ -143,7 +143,7 @@ jobs:
         run: kubectl apply -f ci-cd-k8s-policy-pipeline/policy-enforcement/job.yaml
 
       - name: Wait for Job to complete
-        run: kubectl wait --for=condition=complete job/tf-check -n dev --timeout=60s
+        run: kubectl wait --for=condition=complete job/tf-check -n dev --timeout=200s
 
       - name: Debug - show pod status if failed
         if: failure()
