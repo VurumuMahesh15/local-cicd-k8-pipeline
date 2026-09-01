@@ -6,11 +6,18 @@ metadata:
 spec:
   template:
     spec:
+      initContainers:
+        - name: clone-repo
+          image: alpine/git:latest
+          command: ["sh", "-c", "rm -rf /workspace/ci-cd-k8s-policy-pipeline && git clone https://github.com/VurumuMahesh15/local-cicd-k8-pipeline.git /workspace/ci-cd-k8s-policy-pipeline"]
+          volumeMounts:
+            - name: repo
+              mountPath: /workspace
       containers:
         - name: policy-check
           image: openpolicyagent/conftest:latest
-          workingDir: /workspace
-          command: ["sh", "-c", "conftest test ci-cd-k8s-policy-pipeline/terraform/*.tf --policy ci-cd-k8s-policy-pipeline/policy-enforcement/policies"]
+          workingDir: /workspace/ci-cd-k8s-policy-pipeline/ci-cd-k8s-policy-pipeline
+          command: ["sh", "-c", "conftest test terraform/ --policy policy-enforcement/policies"]
           volumeMounts:
             - name: repo
               mountPath: /workspace
